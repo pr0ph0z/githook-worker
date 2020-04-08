@@ -34,6 +34,8 @@
     "amqplib": "^0.5.5",
     "discord.js": "^12.1.1",
     "dotenv": "^8.2.0",
-    "mongoose": "^5.9.7"
+    "moment": "^2.24.0",
+    "mongoose": "^5.9.7",
+    "node-fetch": "^2.6.0"
   }
 }
