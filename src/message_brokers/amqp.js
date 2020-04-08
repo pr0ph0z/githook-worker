@@ -8,6 +8,7 @@ const connectToAmqp = async () => {
   try {
     const connection = await amqp.connect(amqpUrl)
     channel = await connection.createChannel()
+    return channel
   } catch (error) {
     logger.error(error)
   }
