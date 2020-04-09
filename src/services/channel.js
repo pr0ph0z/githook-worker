@@ -15,6 +15,18 @@ const updateChannel = async ({ id, name }) => {
   }
 }
 
+const getChannel = async () => {
+  try {
+    const channel = await Channel.findOne()
+
+    return channel
+  } catch (error) {
+    logger.error(error)
+    return false
+  }
+}
+
 module.exports = {
-  updateChannel
+  updateChannel,
+  getChannel
 }
