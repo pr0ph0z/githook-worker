@@ -5,6 +5,9 @@ const mongo = require('./src/databases/mongo')
 const logger = require('./src/utils/logger')
 const github = require('./src/services/github')
 const user = require('./src/services/user')
+const channel = require('./src/services/channel')
+
+const client = new Client()
 
 amqp.connectToAmqp()
   .then(channel => {
@@ -14,13 +17,11 @@ amqp.connectToAmqp()
   .then(channel => {
     logger.info('Consuming...')
     channel.consume('hooks', async msg => {
-      //
+      client.emit('hooks', msg)
     })
   })
 
 mongo.createConnection()
-
-const client = new Client()
 
 client.on('ready', () => {
   logger.info('Discord bot is ready!')
@@ -48,6 +49,10 @@ client.on('message', async message => {
     } else {
       message.channel.send('Unrecognized command')
     }
+  } else if (message.content.startsWith('/upchan')) {
+    const { id, name } = message.channel
+    await channel.updateChannel({ id, name })
+    message.channel.send('Main channel updated')
   }
 })
 
