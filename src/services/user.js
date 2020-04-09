@@ -16,6 +16,18 @@ const updateUser = async ({ github, discord }) => {
   }
 }
 
+const findUserByGithubId = async (githubId) => {
+  try {
+    const user = await User.findOne({ 'github.id': githubId })
+
+    return user
+  } catch (error) {
+    logger.error(error)
+    return false
+  }
+}
+
 module.exports = {
-  updateUser
+  updateUser,
+  findUserByGithubId
 }
