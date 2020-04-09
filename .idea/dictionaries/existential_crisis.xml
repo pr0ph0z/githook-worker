@@ -4,6 +4,7 @@
       <w>amqp</w>
       <w>fgithook</w>
       <w>githook</w>
+      <w>upsert</w>
     </words>
   </dictionary>
 </component>
