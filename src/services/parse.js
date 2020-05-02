@@ -22,31 +22,31 @@ const parseMessage = async (message) => {
     case 'create':
       messages.server = {
         id: channel.id,
-        message: `<@!${sender.discord.id}> just created ${article} ${message.type} in **#${message.repository_name}** named \`${message.title}\`. ${message.url}`
+        message: `<@!${sender.discord.id}> just created ${article} ${message.type} in **#${message.repository_name}** named \`${message.title} (${message.number})\`. ${message.url}`
       }
       break
     case 'closed':
       messages.server = {
         id: channel.id,
-        message: `<@!${sender.discord.id}> just closed ${article} ${message.type} in **#${message.repository_name}** named \`${message.title}\`. ${message.url}`
+        message: `<@!${sender.discord.id}> just closed ${article} ${message.type} in **#${message.repository_name}** named \`${message.title} (${message.number})\`. ${message.url}`
       }
       break
     case 'assigned_issue':
       messages.direct_message = {
         id: assignee.discord.id,
-        message: `Hi ${message.assignee.username}, you've been assigned to ${article} ${message.type} in **#${message.repository_name}** named \`${message.title}\`. ${message.url}`
+        message: `Hi ${message.assignee.username}, you've been assigned to ${article} ${message.type} in **#${message.repository_name}** named \`${message.title} (${message.number})\`. ${message.url}`
       }
       break
     case 'assigned_pull_request':
       messages.direct_message = {
         id: assignee.discord.id,
-        message: `Hi ${message.assignee.username}, you've been assigned to ${article} ${message.type} in **#${message.repository_name}** named \`${message.title}\`. ${message.url}`
+        message: `Hi ${message.assignee.username}, you've been assigned to ${article} ${message.type} in **#${message.repository_name}** named \`${message.title} (${message.number})\`. ${message.url}`
       }
       break
     case 'review_pull':
       messages.direct_message = {
         id: reviewer.discord.id,
-        message: `Hi ${message.reviewer.username}, you've been requested to review ${article} ${message.type} in **#${message.repository_name}** named \`${message.title}\` by ${sender.github.username}. ${message.url}`
+        message: `Hi ${message.reviewer.username}, you've been requested to review ${article} ${message.type} in **#${message.repository_name}** named \`${message.title} (${message.number})\` by ${sender.github.username}. ${message.url}`
       }
       break
     case 'changes_requested':
@@ -55,7 +55,7 @@ const parseMessage = async (message) => {
         const assigneeUser = await findUserByGithubId(assignee.github_id)
         messages.direct_messages.push({
           id: assigneeUser.discord.id,
-          message: `Hi ${assignee.username}, your subscribed pull request in **#${message.repository_name}** named \`${message.title}\` has been requested to change by ${sender.github.username}. ${message.url}`
+          message: `Hi ${assignee.username}, your subscribed pull request in **#${message.repository_name}** named \`${message.title} (${message.number})\` has been requested to change by ${sender.github.username}. ${message.url}`
         })
       }
       break
@@ -65,7 +65,7 @@ const parseMessage = async (message) => {
         const assigneeUser = await findUserByGithubId(assignee.github_id)
         messages.direct_messages.push({
           id: assigneeUser.discord.id,
-          message: `Hi ${assignee.username}, your subscribed pull request in **#${message.repository_name}** named \`${message.title}\` has been approved by ${sender.github.username}. ${message.url}`
+          message: `Hi ${assignee.username}, your subscribed pull request in **#${message.repository_name}** named \`${message.title} (${message.number})\` has been approved by ${sender.github.username}. ${message.url}`
         })
       }
       break
