@@ -3,12 +3,13 @@ const { getChannel } = require('../services/channel')
 
 const parseMessage = async (message) => {
   const messages = {}
-  let assignee, reviewer
+  let assignee, reviewer, userTarget
   message = JSON.parse(message)
   message.type = message.type.replace('_', ' ')
   const article = message.type === 'issue' ? 'an' : 'a'
 
   const sender = await findUserByGithubId(message.sender.github_id)
+  userTarget = sender === null ? `\`${message.sender.username}\`` : `<@!${sender.discord.id}>`
 
   if (message.assignee !== undefined) {
     assignee = await findUserByGithubId(message.assignee.github_id)
@@ -22,13 +23,13 @@ const parseMessage = async (message) => {
     case 'create':
       messages.server = {
         id: channel.id,
-        message: `<@!${sender.discord.id}> just created ${article} ${message.type} in **#${message.repository_name}** named \`${message.title} (${message.number})\`. ${message.url}`
+        message: `${userTarget} just created ${article} ${message.type} in **#${message.repository_name}** named \`${message.title} (${message.number})\`. ${message.url}`
       }
       break
     case 'closed':
       messages.server = {
         id: channel.id,
-        message: `<@!${sender.discord.id}> just closed ${article} ${message.type} in **#${message.repository_name}** named \`${message.title} (${message.number})\`. ${message.url}`
+        message: `${userTarget} just closed ${article} ${message.type} in **#${message.repository_name}** named \`${message.title} (${message.number})\`. ${message.url}`
       }
       break
     case 'assigned_issue':
