@@ -49,9 +49,11 @@ const parseMessage = async (message) => {
       }
       break
     case 'review_pull':
-      messages.direct_message = {
-        id: reviewer.discord.id,
-        message: `Hi ${message.reviewer.username}, you've been requested to review ${article} ${message.type} in **#${message.repository_name}** named \`${message.title} (${message.number})\` by ${sender.github.username}. ${message.url}`
+      if (reviewer !== null) {
+        messages.direct_message = {
+          id: reviewer.discord.id,
+          message: `Hi ${message.reviewer.username}, you've been requested to review ${article} ${message.type} in **#${message.repository_name}** named \`${message.title} (${message.number})\` by ${sender.github.username}. ${message.url}`
+        }
       }
       break
     case 'changes_requested':
