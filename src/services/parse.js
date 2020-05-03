@@ -33,15 +33,19 @@ const parseMessage = async (message) => {
       }
       break
     case 'assigned_issue':
-      messages.direct_message = {
-        id: assignee.discord.id,
-        message: `Hi ${message.assignee.username}, you've been assigned to ${article} ${message.type} in **#${message.repository_name}** named \`${message.title} (${message.number})\`. ${message.url}`
+      if (assignee !== null) {
+        messages.direct_message = {
+          id: assignee.discord.id,
+          message: `Hi ${message.assignee.username}, you've been assigned to ${article} ${message.type} in **#${message.repository_name}** named \`${message.title} (${message.number})\`. ${message.url}`
+        }
       }
       break
     case 'assigned_pull_request':
-      messages.direct_message = {
-        id: assignee.discord.id,
-        message: `Hi ${message.assignee.username}, you've been assigned to ${article} ${message.type} in **#${message.repository_name}** named \`${message.title} (${message.number})\`. ${message.url}`
+      if (assignee !== null) {
+        messages.direct_message = {
+          id: assignee.discord.id,
+          message: `Hi ${message.assignee.username}, you've been assigned to ${article} ${message.type} in **#${message.repository_name}** named \`${message.title} (${message.number})\`. ${message.url}`
+        }
       }
       break
     case 'review_pull':
