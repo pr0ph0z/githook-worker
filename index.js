@@ -47,31 +47,35 @@ client.on('ready', () => {
 })
 
 client.on('message', async message => {
-  if (message.content.startsWith('/assign')) {
-    const [commands] = [...message.content.matchAll(/(\/assign)\s(.*)\s(.*)/g)]
-    if (commands.length === 4) {
-      const [,, githubUsername, discordId] = commands
-      const githubUser = await github.getUserIdByUsername(githubUsername)
-      if (githubUser !== 'Not Found') {
-        const payload = {
-          github: {
-            id: githubUser,
-            username: githubUsername
-          },
-          discord: {
-            id: discordId.replace(/[<@!>]/g, '')
+  try {
+    if (message.content.startsWith('/assign')) {
+      const [commands] = [...message.content.matchAll(/(\/assign)\s(.*)\s(.*)/g)]
+      if (commands.length === 4) {
+        const [,, githubUsername, discordId] = commands
+        const githubUser = await github.getUserIdByUsername(githubUsername)
+        if (githubUser !== 'Not Found') {
+          const payload = {
+            github: {
+              id: githubUser,
+              username: githubUsername
+            },
+            discord: {
+              id: discordId.replace(/[<@!>]/g, '')
+            }
           }
+          await user.updateUser(payload)
+          message.channel.send('User assigned!')
         }
-        await user.updateUser(payload)
-        message.channel.send('User assigned!')
+      } else {
+        message.channel.send('Unrecognized command')
       }
-    } else {
-      message.channel.send('Unrecognized command')
+    } else if (message.content.startsWith('/upchan')) {
+      const { id, name } = message.channel
+      await channel.updateChannel({ id, name })
+      message.channel.send('Main channel updated')
     }
-  } else if (message.content.startsWith('/upchan')) {
-    const { id, name } = message.channel
-    await channel.updateChannel({ id, name })
-    message.channel.send('Main channel updated')
+  } catch (error) {
+    logger.error(error)
   }
 })
 
