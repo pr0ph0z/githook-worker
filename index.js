@@ -43,6 +43,7 @@ client.on('ready', () => {
         channel.ack(msg)
       })
     })
+    .catch(error => logger.error(error))
 })
 
 client.on('message', async message => {
@@ -75,6 +76,5 @@ client.on('message', async message => {
 })
 
 client.login(process.env.CLIENT_SECRET)
-  .then(discordClientSecret => {
-    logger.info('Discord bot is logged in!')
-  })
+  .then(discordClientSecret => logger.info('Discord bot is logged in!'))
+  .catch(error => logger.error(error))
