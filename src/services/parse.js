@@ -60,20 +60,24 @@ const parseMessage = async (message) => {
       messages.direct_messages = []
       for (const assignee of message.assignees) {
         const assigneeUser = await findUserByGithubId(assignee.github_id)
-        messages.direct_messages.push({
-          id: assigneeUser.discord.id,
-          message: `Hi ${assignee.username}, your subscribed pull request in **#${message.repository_name}** named \`${message.title} (${message.number})\` has been requested to change by ${sender.github.username}. ${message.url}`
-        })
+        if (assigneeUser !== null) {
+          messages.direct_messages.push({
+            id: assigneeUser.discord.id,
+            message: `Hi ${assignee.username}, your subscribed pull request in **#${message.repository_name}** named \`${message.title} (${message.number})\` has been requested to change by ${sender.github.username}. ${message.url}`
+          })
+        }
       }
       break
     case 'approved':
       messages.direct_messages = []
       for (const assignee of message.assignees) {
         const assigneeUser = await findUserByGithubId(assignee.github_id)
-        messages.direct_messages.push({
-          id: assigneeUser.discord.id,
-          message: `Hi ${assignee.username}, your subscribed pull request in **#${message.repository_name}** named \`${message.title} (${message.number})\` has been approved by ${sender.github.username}. ${message.url}`
-        })
+        if (assigneeUser !== null) {
+          messages.direct_messages.push({
+            id: assigneeUser.discord.id,
+            message: `Hi ${assignee.username}, your subscribed pull request in **#${message.repository_name}** named \`${message.title} (${message.number})\` has been approved by ${sender.github.username}. ${message.url}`
+          })
+        }
       }
       break
   }
