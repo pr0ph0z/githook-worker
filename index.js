@@ -11,6 +11,8 @@ const { parseMessage } = require('./src/services/parse')
 const client = new Client()
 
 mongo.createConnection()
+  .then(() => logger.info('MongoDB connected!'))
+  .catch(error => logger.error(error))
 
 client.on('ready', () => {
   logger.info('Discord bot is ready!')
