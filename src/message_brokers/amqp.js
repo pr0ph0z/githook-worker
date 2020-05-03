@@ -1,6 +1,5 @@
 const amqp = require('amqplib')
 const { amqpUrl } = require('../config')
-const logger = require('../utils/logger')
 
 let channel
 
