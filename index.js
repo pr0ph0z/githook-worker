@@ -1,5 +1,6 @@
 require('dotenv').config()
 const { Client } = require('discord.js')
+const { Octokit } = require('@octokit/rest')
 const amqp = require('./src/message_brokers/amqp')
 const mongo = require('./src/databases/mongo')
 const logger = require('./src/utils/logger')
@@ -9,6 +10,9 @@ const channel = require('./src/services/channel')
 const { parseMessage } = require('./src/services/parse')
 
 const client = new Client()
+const octokit = new Octokit({
+  auth: process.env.GITHUB_ACCES_TOKEN
+})
 
 mongo.createConnection()
   .then(() => logger.info('MongoDB connected!'))
@@ -23,7 +27,7 @@ client.on('ready', () => {
     })
     .then(channel => {
       logger.info('Consuming...')
-      channel.consume('hooks', async msg => {
+      channel.consume('hooks_dev', async msg => {
         const messages = await parseMessage(msg.content.toString())
 
         if (messages.server !== undefined) {
@@ -75,6 +79,23 @@ client.on('message', async message => {
       const { id, name } = message.channel
       await channel.updateChannel({ id, name })
       message.channel.send('Main channel updated')
+    } else if (message.content.startsWith('/activity')) {
+      const events = await github.getOrgEvents(octokit)
+      const contributions = events.reduce((acc, { actor }, index) => {
+        (acc[actor] || (acc[actor] = { count: 0 })).count += 1
+        return acc
+      }, {})
+      const sortContributions = Object.keys(contributions)
+        .sort((curr, next) => contributions[next].count - contributions[curr].count)
+        .map(username => ({ username, count: contributions[username].count }))
+      const text = sortContributions
+        .map((contributor, index) => `${index + 1}. ${contributor.username}: ${contributor.count}`)
+        .join('\n')
+      message.channel.send(`
+      \`\`\`
+${text}
+      \`\`\`
+      `)
     }
   } catch (error) {
     logger.error(error)
