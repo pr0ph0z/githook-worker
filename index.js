@@ -91,8 +91,10 @@ client.on('message', async message => {
       const text = sortContributions
         .map((contributor, index) => `${index + 1}. ${contributor.username}: ${contributor.count}`)
         .join('\n')
+        .trimEnd()
       message.channel.send(`
       \`\`\`
+🔥 Badass Contributor of The Day 🔥\n
 ${text}
       \`\`\`
       `)
