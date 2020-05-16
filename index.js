@@ -96,8 +96,7 @@ client.on('message', async message => {
       \`\`\`
 🔥 Badass Contributor of The Day 🔥\n
 ${text}
-      \`\`\`
-      `)
+      \`\`\``)
     }
   } catch (error) {
     logger.error(error)
