@@ -3,13 +3,13 @@ const { getChannel } = require('../services/channel')
 
 const parseMessage = async (message) => {
   const messages = {}
-  let assignee, reviewer, userTarget
+  let assignee, reviewer
   message = JSON.parse(message)
   message.type = message.type.replace('_', ' ')
   const article = message.type === 'issue' ? 'an' : 'a'
 
   const sender = await findUserByGithubId(message.sender.github_id)
-  userTarget = sender === null ? `\`${message.sender.username}\`` : `<@!${sender.discord.id}>`
+  const userTarget = sender === null ? `\`${message.sender.username}\`` : `<@!${sender.discord.id}>`
 
   if (message.assignee !== undefined) {
     assignee = await findUserByGithubId(message.assignee.github_id)
